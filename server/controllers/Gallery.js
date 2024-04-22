@@ -46,7 +46,11 @@ const createGallery = async (req, res) => {
 };
 
 const removeGallery = async (req, res) => {
-
+    if (!req.body.galleryName) {
+        return res.status(400).json({ error: 'Name is required to remove gallery.' });
+    }
+    
+    console.log('Gallery removed! (NOT)');
 };
 
 const getImages = async (req, res) => {
@@ -88,9 +92,13 @@ const addImage = async (req, res) => {
     }
 };
 
-const removeImage = async (req, res) => [
+const removeImage = async (req, res) => {
+    if (!req.body.imageName) {
+        return res.status(400).json({ error: 'Name is required to remove image.' });
+    }
 
-];
+    console.log('Image removed! (NOT)');
+};
 
 module.exports = {
     galleryPage,
