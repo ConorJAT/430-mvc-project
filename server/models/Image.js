@@ -36,6 +36,7 @@ ImageSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   info: doc.info,
   url: doc.url,
+  _id: doc._id,
 });
 
 const ImageModel = mongoose.model('Image', ImageSchema);

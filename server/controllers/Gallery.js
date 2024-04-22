@@ -6,6 +6,10 @@ const { Gallery, Image } = models;
 const galleryPage = async (req, res) => { res.render('app'); };
 
 const getGalleries = async (req, res) => {
+  if (req.session.account.galleryCount === 0) {
+    return res.status(200).json({ galleries: [] });
+  }
+  
   try {
     const query = { owner: req.session.account._id };
     const docs = await Gallery.find(query).select('name description').lean().exec();
@@ -13,7 +17,7 @@ const getGalleries = async (req, res) => {
     return res.json({ galleries: docs });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'Error retrieving gallery data.', galleries: [] });
+    return res.status(500).json({ error: 'Error retrieving gallery data.' });
   }
 };
 
@@ -55,7 +59,23 @@ const removeGallery = async (req, res) => {
   return res.status(201);
 };
 
+const setGallery = async (req, res) => {
+  try {
+    const query = { owner: req.session.account._id, name: req.body.name };
+    const doc = Gallery.findOne(query).lean().exec();
+
+    req.session.gallery = Gallery.toAPI(doc);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'An error occured setting current gallery.' });
+  }
+};
+
 const getImages = async (req, res) => {
+  if (req.session.account.galleryCount === 0) {
+    return res.status(200).json({ images: [] });
+  }
+  
   if (!req.session.gallery) {
     return res.status(400).json({ error: 'No galleries to retrieve images from.', images: [] });
   }

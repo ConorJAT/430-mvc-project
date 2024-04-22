@@ -20,6 +20,11 @@ const GallerySchema = new mongoose.Schema({
     required: true,
     ref: 'Account',
   },
+  imageCount: {
+    type: Number,
+    max: 20,
+    default: 0,
+  },
   createDate: {
     type: Date,
     default: Date.now,
@@ -33,6 +38,7 @@ const GallerySchema = new mongoose.Schema({
 GallerySchema.statics.toAPI = (doc) => ({
   name: doc.name,
   description: doc.description,
+  imageCount: doc.imageCount,
   _id: doc._id,
 });
 

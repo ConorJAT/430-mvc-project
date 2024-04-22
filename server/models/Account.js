@@ -1,6 +1,7 @@
 // Import bcrypt and mongoose.
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const { max } = require('underscore');
 
 // Define number of salt rounds for encryption.
 const saltRounds = 10;
@@ -20,6 +21,15 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  galleryCount: {
+    type: Number,
+    max: 10,
+    default: 0,
+  },
+  isSubscribed: {
+    type: Boolean,
+    default: false,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
@@ -29,6 +39,8 @@ const AccountSchema = new mongoose.Schema({
 // Converts doc to be used later in Redis.
 AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
+  galleryCount: doc.galleryCount,
+  isSubscribed: doc.isSubscribed,
   _id: doc._id,
 });
 
