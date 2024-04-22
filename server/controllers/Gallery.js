@@ -55,6 +55,10 @@ const removeGallery = async (req, res) => {
 };
 
 const getImages = async (req, res) => {
+  if (!req.session.gallery) {
+    return res.status(400).json({ error: 'No galleries to retrieve images from.', images: [] })
+  }
+  
   try {
     const query = { gallery: req.session.gallery._id };
     const docs = await Image.find(query).select('name info url').lean().exec();
@@ -69,6 +73,10 @@ const getImages = async (req, res) => {
 const addImage = async (req, res) => {
   if (!req.body.imageName || !req.body.imageURL) {
     return res.status(400).json({ error: 'Name and URL are required to add image.' });
+  }
+
+  if (!req.session.gallery) {
+    return res.status(400).json({ error: 'No galleries created to add image.' })
   }
 
   const imgData = {

@@ -1,7 +1,7 @@
 // Import our Account model.
 const models = require('../models');
 
-const { Account } = models;
+const { Account, Gallery } = models;
 
 const loginPage = (req, res) => { res.render('login'); };
 
@@ -41,12 +41,26 @@ const login = (req, res) => {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  return Account.authenticate(user, pass, (err, account) => {
+  return Account.authenticate(user, pass, async (err, account) => {
     if (err || !account) {
       return res.status(401).json({ error: 'Invalid username and/or password.' });
     }
 
     req.session.account = Account.toAPI(account);
+
+    try {
+      const query = { owner: req.session.account._id };
+      const doc = await Gallery.findOne(query).lean().exec();
+
+      if (doc) {
+        req.session.gallery = Gallery.toAPI(doc);
+      } else {
+        req.session.gallery = null;
+      }
+    } catch (err) {
+      console.log(err);
+      req.session.gallery = null;
+    }
 
     return res.json({ redirect: '/creator' });
   });
@@ -74,22 +88,22 @@ const changePassword = async (req, res) => {
     return res.status(400).json({ error: 'New passwords do not match.' });
   }
 
-  Account.authenticate(req.session.account.username, newPass, (err, account) => {
+  return Account.authenticate(req.session.account.username, oldPass, async (err, account) => {
     if (err || !account) {
       return res.status(401).json({ error: 'Invalid old password.' });
     }
+
+    try {
+      const hash = await Account.generateHash(newPass);
+
+      await Account.findByIdAndUpdate(req.session.account._id, { password: hash });
+      console.log('Password change successful.');
+      return res.json({ redirect: '/creator' });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Error changing password.' });
+    }
   });
-
-  try {
-    const hash = await Account.generateHash(newPass);
-
-    await Account.findByIdAndUpdate(req.session.account._id, { password: hash });
-    console.log('Password change successful.');
-    return res.json({ redirect: '/creator' });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: 'Error changing password.' });
-  }
 };
 
 module.exports = {
