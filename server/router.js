@@ -14,11 +14,11 @@ const router = (app) => {
 
   app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
 
-  app.get('/creator',  mid.requiresLogin, controllers.Gallery.galleryPage);
-  app.post('/createGallery',  mid.requiresLogin, controllers.Gallery.createGallery);
-  app.post('/removeGallery',  mid.requiresLogin, controllers.Gallery.removeGallery);
-  app.post('/addImage',  mid.requiresLogin, controllers.Gallery.addImage);
-  app.post('/removeImage',  mid.requiresLogin, controllers.Gallery.removeImage);
+  app.get('/creator', mid.requiresLogin, controllers.Gallery.galleryPage);
+  app.post('/createGallery', mid.requiresLogin, controllers.Gallery.createGallery);
+  app.post('/removeGallery', mid.requiresLogin, controllers.Gallery.removeGallery);
+  app.post('/addImage', mid.requiresLogin, controllers.Gallery.addImage);
+  app.post('/removeImage', mid.requiresLogin, controllers.Gallery.removeImage);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };

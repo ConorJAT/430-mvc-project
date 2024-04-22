@@ -57,8 +57,8 @@ const login = (req, res) => {
       } else {
         req.session.gallery = null;
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
       req.session.gallery = null;
     }
 
@@ -99,8 +99,8 @@ const changePassword = async (req, res) => {
       await Account.findByIdAndUpdate(req.session.account._id, { password: hash });
       console.log('Password change successful.');
       return res.json({ redirect: '/creator' });
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
       return res.status(500).json({ error: 'Error changing password.' });
     }
   });
