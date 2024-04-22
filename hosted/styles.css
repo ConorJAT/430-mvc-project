@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+body{
+    margin: 0;
+}
+
+/* -- GRID STYELS -- */
+#app{
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: 40px 780px;
+    grid-template-areas: 
+        "nav     nav     nav"
+        "input   images  galleries";
+
+    width: 100%;
+    min-width: 750px;
+    max-width: 1360px;
+    margin: 0 auto;
+}
+
+.navbar{
+    grid-area: nav;
+
+    display: flex;
+}
+
+.userInput{
+    grid-area: input;
+
+    background-color: #d1cad1;
+    padding: 10px;
+}
+
+.imgDisplay{
+    grid-area: images; 
+    background-color: rgb(233, 230, 233);
+}
+
+.galList{
+    grid-area: galleries;
+
+    background-color: #d1cad1;
+
+    padding: 10px;
+
+    text-align: center;
+
+    overflow: auto;
+}
+
+/* -- NAVBAR STYLES -- */
+.navBtn{
+    width: 25%;
+    height: 40px;
+
+    background-color: #4DA871;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navBtn:hover{
+    background-color: #408C5E;
+}
+
+.navBtn:active{
+    background-color: #3A7E55;
+}
+
+/* -- IMAGE DISPLAY STYLES -- */
+.images{
+    padding: 20px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 10px;
+
+    overflow: auto;
+}
+
+.galImage {
+    height: 120px;
+    transition: 0.2s;
+    z-index: 5;
+
+    border: 1px solid black;
+}
+
+.galImage:hover {
+    transform: scale(1.2);
+    z-index: 6;
+}
+
+/* -- GALLERY SELECT SECTION -- */
+.galleries{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 15px;
+}
+
+.gallery{
+    aspect-ratio: 1/1;
+    width: 85%;
+    max-height: 85%;
+    max-width: 180px;
+    background-color: rgb(142, 184, 167);
+    border: 1px solid black;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery:hover{
+    background-color: #408C5E;
+}
+
+/* -- FONT STYLES -- */
+h3{
+    font-family: 'Montserrat', sans-serif;
+}
+
+div, input, p{
+    font-family: 'Poppins', sans-serif;
+}

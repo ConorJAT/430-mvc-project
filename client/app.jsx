@@ -93,9 +93,9 @@ const CreateGalleryForm = (props) => {
                 method="POST"
             >
                 <label htmlFor="galName">Gallery Name: </label>
-                <input type="text" id="galName" name="galName" placeholder="Enter Gallery Name"/>
-                <label htmlFor="galDesc">Gallery Description: </label>
-                <input type="text" id="galDesc" name="galDesc" placeholder="Enter Gallery Desc."/>
+                <input type="text" id="galName" name="galName" placeholder="Enter Gallery Name"/><br/>
+                <label htmlFor="galDesc">Gallery Desc: </label>
+                <input type="text" id="galDesc" name="galDesc" placeholder="Enter Gallery Desc."/><br/><br/>
                 <input type="submit" value="Create Gallery"/>
             </form>
         </div>
@@ -112,7 +112,7 @@ const RemoveGalleryForm = (props) => {
                 method="POST"
             >
                 <label htmlFor="galName">Gallery Name: </label>
-                <input type="text" id="galName" name="galName" placeholder="Enter Gallery Name"/>
+                <input type="text" id="galName" name="galName" placeholder="Enter Gallery Name"/><br/><br/>
                 <input type="submit" value="Remove Gallery"/>
             </form>
         </div>
@@ -129,11 +129,11 @@ const AddImageForm = (props) => {
                 method="POST"
             >
                 <label htmlFor="imgName">Image Name: </label>
-                <input type="text" id="imgName" name="imgName" placeholder="Enter Image Name"/>
+                <input type="text" id="imgName" name="imgName" placeholder="Enter Image Name"/><br/>
                 <label htmlFor="imgInfo">Image Info: </label>
-                <input type="text" id="imgInfo" name="imgInfo" placeholder="Enter Image Info"/>
+                <input type="text" id="imgInfo" name="imgInfo" placeholder="Enter Image Info"/><br/>
                 <label htmlFor="imgURL">Image URL: </label>
-                <input type="text" id="imgURL" name="imgURL" placeholder="Enter Image URL"/>
+                <input type="text" id="imgURL" name="imgURL" placeholder="Enter Image URL"/><br/><br/>
                 <input type="submit" value="Add Image"/>
             </form>
         </div>
@@ -150,7 +150,7 @@ const RemoveImageForm = (props) => {
                 method="POST"
             >
                 <label htmlFor="imgName">Image Name: </label>
-                <input type="text" id="imgName" name="imgName" placeholder="Enter Image Name"/>
+                <input type="text" id="imgName" name="imgName" placeholder="Enter Image Name"/><br/><br/>
                 <input type="submit" value="Remove Image"/>
             </form>
         </div>
@@ -252,11 +252,11 @@ const Creator = (props) => {
     const [reloadGalleries, setReloadGalleries] = useState(false);
 
     const creatorNav = (
-        <nav>
-            <div onClick={() => setUserForm('createGal')}>Create Gallery</div>
-            <div onClick={() => setUserForm('addImg')}>Add Image to Gallery</div>
-            <div onClick={() => setUserForm('removeGal')}>Remove Gallery</div>
-            <div onClick={() => setUserForm('removeImg')}>Remove Image from Gallery</div>
+        <nav className='navbar'>
+            <div className='navBtn' onClick={() => setUserForm('createGal')}>Create Gallery</div>
+            <div className='navBtn' onClick={() => setUserForm('addImg')}>Add Image to Gallery</div>
+            <div className='navBtn' onClick={() => setUserForm('removeGal')}>Remove Gallery</div>
+            <div className='navBtn' onClick={() => setUserForm('removeImg')}>Remove Image from Gallery</div>
         </nav>
     );
 
