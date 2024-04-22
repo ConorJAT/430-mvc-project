@@ -22,7 +22,7 @@ const signup = async (req, res) => {
         const newAccount = new Account({ username: user, password: hash });
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
-        return res.json({ redirect: '/maker' });
+        return res.json({ redirect: '/creator' });
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
@@ -47,7 +47,7 @@ const login = (req, res) => {
 
         req.session.account = Account.toAPI(account);
 
-        return res.json({ redirect: '/maker' });
+        return res.json({ redirect: '/creator' });
     });
 };
 
@@ -84,7 +84,7 @@ const changePassword = async (req, res) => {
     
         await Account.findByIdAndUpdate(req.session.account._id, { password: hash });
         console.log('Password change successful.');
-        return res.json({ redirect: '/maker' });
+        return res.json({ redirect: '/creator' });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: 'Error changing password.' });
