@@ -21,7 +21,7 @@ const ImageSchema = new mongoose.Schema({
         trim: true,
         set: setURL,
     },
-    owner: {
+    gallery: {
         type: mongoose.Schema.ObjectId,
         required: true,
         ref: 'Gallery',

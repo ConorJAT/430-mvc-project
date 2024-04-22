@@ -7,13 +7,14 @@ const handleCreateGallery = (e) => {
     e.preventDefault();
 
     const galleryName = e.target.querySelector('#galName').value;
+    const galleryDescription = e.target.querySelector('#galDesc').value;
 
     if (!galleryName) {
         helper.handleError('Name required to create gallery.');
         return false;
     }
 
-    helper.sendPost(e.target.action, {galleryName});
+    helper.sendPost(e.target.action, {galleryName, galleryDescription});
     return false;
 };
 
@@ -93,6 +94,8 @@ const CreateGalleryForm = (props) => {
             >
                 <label htmlFor="galName">Gallery Name: </label>
                 <input type="text" id="galName" name="galName" placeholder="Enter Gallery Name"/>
+                <label htmlFor="galDesc">Gallery Description: </label>
+                <input type="text" id="galDesc" name="galDesc" placeholder="Enter Gallery Desc."/>
                 <input type="submit" value="Create Gallery"/>
             </form>
         </div>
@@ -216,7 +219,7 @@ const GalleryList = (props) => {
         const loadGalleriesFromServer = async () => {
             const response = await fetch('/getGalleries');
             const data = await response.json();
-            setGalleries(data.images);
+            setGalleries(data.galleries);
         };
 
         loadGalleriesFromServer();
