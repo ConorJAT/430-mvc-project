@@ -19,7 +19,7 @@ const router = (app) => {
   app.post('/addImage', controllers.Gallery.addImage);
   app.post('/removeImage', controllers.Gallery.removeImage);
 
-  app.get('/', controllers.Account.login);
+  app.get('/', controllers.Account.loginPage);
 };
 
 module.exports = router;

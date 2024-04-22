@@ -80,7 +80,7 @@ const LoginWindow = (props) => {
 
 const init = () => {
     const loginButton = document.getElementById('loginBtn');
-    const signupButton = docuement.getElementById('signupBtn');
+    const signupButton = document.getElementById('signupBtn');
 
     const root = createRoot(document.getElementById('content'));
 

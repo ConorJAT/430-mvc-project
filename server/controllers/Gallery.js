@@ -13,7 +13,7 @@ const getGalleries = async (req, res) => {
     return res.json({ galleries: docs });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'Error retrieving gallery data.' });
+    return res.status(500).json({ error: 'Error retrieving gallery data.', galleries: [] });
   }
 };
 
@@ -62,7 +62,7 @@ const getImages = async (req, res) => {
     return res.json({ images: docs });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'Error retrieving image data.' });
+    return res.status(500).json({ error: 'Error retrieving image data.', images: [] });
   }
 };
 
