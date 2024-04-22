@@ -1,25 +1,26 @@
 const controllers = require('./controllers');
+const mid = require('./middleware');
 
 const router = (app) => {
-  app.get('/getImages', controllers.Gallery.getImages);
-  app.get('/getGalleries', controllers.Gallery.getGalleries);
+  app.get('/getImages', mid.requiresLogin, controllers.Gallery.getImages);
+  app.get('/getGalleries', mid.requiresLogin, controllers.Gallery.getGalleries);
 
-  app.get('/login', controllers.Account.loginPage);
-  app.post('/login', controllers.Account.login);
+  app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
 
-  app.post('/signup', controllers.Account.signup);
+  app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
 
-  app.get('/logout', controllers.Account.logout);
+  app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.post('/changePassword', controllers.Account.changePassword);
+  app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
 
-  app.get('/creator', controllers.Gallery.galleryPage);
-  app.post('/createGallery', controllers.Gallery.createGallery);
-  app.post('/removeGallery', controllers.Gallery.removeGallery);
-  app.post('/addImage', controllers.Gallery.addImage);
-  app.post('/removeImage', controllers.Gallery.removeImage);
+  app.get('/creator',  mid.requiresLogin, controllers.Gallery.galleryPage);
+  app.post('/createGallery',  mid.requiresLogin, controllers.Gallery.createGallery);
+  app.post('/removeGallery',  mid.requiresLogin, controllers.Gallery.removeGallery);
+  app.post('/addImage',  mid.requiresLogin, controllers.Gallery.addImage);
+  app.post('/removeImage',  mid.requiresLogin, controllers.Gallery.removeImage);
 
-  app.get('/', controllers.Account.loginPage);
+  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
 module.exports = router;
