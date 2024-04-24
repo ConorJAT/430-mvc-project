@@ -17,6 +17,7 @@ const router = (app) => {
   app.get('/creator', mid.requiresLogin, controllers.Gallery.galleryPage);
   app.post('/createGallery', mid.requiresLogin, controllers.Gallery.createGallery);
   app.post('/removeGallery', mid.requiresLogin, controllers.Gallery.removeGallery);
+  app.post('/setGallery', mid.requiresLogin, controllers.Gallery.setGallery);
   app.post('/addImage', mid.requiresLogin, controllers.Gallery.addImage);
   app.post('/removeImage', mid.requiresLogin, controllers.Gallery.removeImage);
 

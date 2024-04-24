@@ -1,7 +1,6 @@
 // Import bcrypt and mongoose.
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const { max } = require('underscore');
 
 // Define number of salt rounds for encryption.
 const saltRounds = 10;

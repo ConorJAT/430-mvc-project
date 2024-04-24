@@ -27,7 +27,22 @@ const handleError = (err) =>{
     alert(err);
 };
 
+const setGallery = async (e) => {
+    const gals = document.getElementsByClassName('gallery');
+    console.log(gals);
+
+    for (const gallery of gals) {
+        gallery.setAttribute('current', 'false');
+        gallery.style.backgroundColor = '#B4D0C5';
+    }
+
+    sendPost('/setGallery', { name: e.target.name });
+    e.target.setAttribute('current', 'true');
+    e.target.style.backgroundColor = '#8EB8A7';
+};
+
 module.exports = {
     sendPost,
     handleError,
+    setGallery,
 };

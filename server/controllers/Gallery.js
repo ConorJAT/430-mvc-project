@@ -1,7 +1,7 @@
 // Import our Gallery and Image models.
 const models = require('../models');
 
-const { Gallery, Image } = models;
+const { Account, Gallery, Image } = models;
 
 const galleryPage = async (req, res) => { res.render('app'); };
 
@@ -9,7 +9,7 @@ const getGalleries = async (req, res) => {
   if (req.session.account.galleryCount === 0) {
     return res.status(200).json({ galleries: [] });
   }
-  
+
   try {
     const query = { owner: req.session.account._id };
     const docs = await Gallery.find(query).select('name description').lean().exec();
@@ -37,6 +37,15 @@ const createGallery = async (req, res) => {
     await newGallery.save();
 
     req.session.gallery = Gallery.toAPI(newGallery);
+
+    // NEED TO UPDATE ACCOUNT INFO!
+    const doc = Account.findOneAndUpdate(
+      { _id: req.session.account._id },
+      { $inc: { galleryCount: 1 } },
+    ).lean().exec();
+    req.session.account = Account.toAPI(doc);
+    // req.session.account.galleryCount++;
+
     return res.status(201).json({
       name: newGallery.name,
       description: newGallery.description,
@@ -65,6 +74,7 @@ const setGallery = async (req, res) => {
     const doc = Gallery.findOne(query).lean().exec();
 
     req.session.gallery = Gallery.toAPI(doc);
+    return res.status(200);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured setting current gallery.' });
@@ -75,7 +85,7 @@ const getImages = async (req, res) => {
   if (req.session.account.galleryCount === 0) {
     return res.status(200).json({ images: [] });
   }
-  
+
   if (!req.session.gallery) {
     return res.status(400).json({ error: 'No galleries to retrieve images from.', images: [] });
   }
@@ -135,6 +145,7 @@ module.exports = {
   galleryPage,
   getGalleries,
   createGallery,
+  setGallery,
   removeGallery,
   getImages,
   addImage,

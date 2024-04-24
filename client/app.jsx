@@ -226,6 +226,7 @@ const GalleryList = (props) => {
     }, [props.reloadGalleries]);
 
     if(galleries.length === 0) {
+        console.log('No galleries!');
         return (
             <div className="galleries">
                 <h3>No galleries to display.</h3>
@@ -235,7 +236,7 @@ const GalleryList = (props) => {
 
     const galleryDivs = galleries.map(gal => {
         return (
-            <div className="gallery" name={gal.name} current="false">{gal.name}</div>
+            <div className="gallery" name={gal.name} current="false" onClick={helper.setGallery}>{gal.name}</div>
         );
     });
 
