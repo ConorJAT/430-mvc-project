@@ -39,7 +39,7 @@ const createGallery = async (req, res) => {
     req.session.gallery = Gallery.toAPI(newGallery);
 
     // NEED TO UPDATE ACCOUNT INFO!
-    const doc = Account.findOneAndUpdate(
+    const doc = await Account.findOneAndUpdate(
       { _id: req.session.account._id },
       { $inc: { galleryCount: 1 } },
     ).lean().exec();

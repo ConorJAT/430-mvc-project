@@ -5,7 +5,7 @@ body{
 }
 
 /* -- GRID STYELS -- */
-#app{
+#creator{
     display: grid;
     grid-template-columns: 25% 50% 25%;
     grid-template-rows: 40px 780px;

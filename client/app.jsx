@@ -3,7 +3,7 @@ const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
-const handleCreateGallery = (e) => {
+const handleCreateGallery = (e, onGalleryCreate) => {
     e.preventDefault();
 
     const galleryName = e.target.querySelector('#galName').value;
@@ -14,11 +14,11 @@ const handleCreateGallery = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {galleryName, galleryDescription});
+    helper.sendPost(e.target.action, {galleryName, galleryDescription}, onGalleryCreate);
     return false;
 };
 
-const handleRemoveGallery = (e) => {
+const handleRemoveGallery = (e, onGalleryRemove) => {
     e.preventDefault();
 
     const galleryName = e.target.querySelector('#galName').value;
@@ -28,11 +28,11 @@ const handleRemoveGallery = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {galleryName});
+    helper.sendPost(e.target.action, {galleryName}, onGalleryRemove);
     return false;
 };
 
-const handleAddImage = (e) => {
+const handleAddImage = (e, onImageAdd) => {
     e.preventDefault();
 
     const imageName = e.target.querySelector('#imgName').value;
@@ -44,11 +44,11 @@ const handleAddImage = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {imageName, imageInfo, imageURL});
+    helper.sendPost(e.target.action, {imageName, imageInfo, imageURL}, onImageAdd);
     return false;
 };
 
-const handleRemoveImage = (e) => {
+const handleRemoveImage = (e, onImageRemove) => {
     e.preventDefault();
 
     const imageName = e.target.querySelector('#imgName').value;
@@ -58,7 +58,7 @@ const handleRemoveImage = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {imageName});
+    helper.sendPost(e.target.action, {imageName}, onImageRemove);
     return false;
 };
 
@@ -88,7 +88,7 @@ const CreateGalleryForm = (props) => {
         <div>
             <form id="createGalleryForm"
                 name="createGalleryForm"
-                onSubmit={handleCreateGallery}
+                onSubmit={(e) => handleCreateGallery(e, props.triggerReload)}
                 action="/createGallery" 
                 method="POST"
             >
@@ -107,7 +107,7 @@ const RemoveGalleryForm = (props) => {
         <div>
             <form id="removeGalleryForm"
                 name="removeGalleryForm"
-                onSubmit={handleRemoveGallery}
+                onSubmit={(e) => handleRemoveGallery(e, props.triggerReload)}
                 action="/removeGallery" 
                 method="POST"
             >
@@ -124,7 +124,7 @@ const AddImageForm = (props) => {
         <div>
             <form id="addImageForm"
                 name="addImageForm"
-                onSubmit={handleAddImage}
+                onSubmit={(e) => handleAddImage(e, props.triggerReload)}
                 action="/addImage" 
                 method="POST"
             >
@@ -145,7 +145,7 @@ const RemoveImageForm = (props) => {
         <div>
             <form id="removeImageForm"
                 name="removeImageForm"
-                onSubmit={handleRemoveImage}
+                onSubmit={(e) => handleRemoveImage(e, props.triggerReload)}
                 action="/removeImage" 
                 method="POST"
             >
@@ -167,11 +167,11 @@ const PasswordChangeForm = (props) => {
                 method="POST"
             >
                 <label htmlFor="oldPass">Old Password: </label>
-                <input type="text" id="oldPass" name="oldPass" placeholder="Enter Old Password"/>
+                <input type="text" id="oldPass" name="oldPass" placeholder="Enter Old Password"/><br/>
                 <label htmlFor="newPass">New Password: </label>
-                <input type="password" id="newPass" name="newPass" placeholder="Enter New Password"/>
+                <input type="password" id="newPass" name="newPass" placeholder="Enter New Password"/><br/>
                 <label htmlFor="newPass2">Retype New Password: </label>
-                <input type="password" id="newPass2" name="newPass2" placeholder="Retype New Password"/>
+                <input type="password" id="newPass2" name="newPass2" placeholder="Retype New Password"/><br/><br/>
                 <input type="submit" value="Change Password"/>
             </form>
         </div>
@@ -264,7 +264,7 @@ const Creator = (props) => {
     switch (userForm) {
         case 'createGal':
             return (
-                <>
+                <div id="creator">
                     {creatorNav}
 
                     <section className="userInput">
@@ -280,12 +280,12 @@ const Creator = (props) => {
                         <h3>List of Galleries</h3>
                         <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
                     </section>
-                </>
+                </div>
             );
 
         case 'addImg':
             return (
-                <>
+                <div id="creator">
                     {creatorNav}
 
                     <section className="userInput">
@@ -301,12 +301,12 @@ const Creator = (props) => {
                         <h3>List of Galleries</h3>
                         <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
                     </section>
-                </>
+                </div>
             );
 
         case 'removeGal':
             return (
-                <>
+                <div id="creator">
                     {creatorNav}
 
                     <section className="userInput">
@@ -322,12 +322,12 @@ const Creator = (props) => {
                         <h3>List of Galleries</h3>
                         <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
                     </section>
-                </>
+                </div>
             );
 
         case 'removeImg':
             return (
-                <>
+                <div id="creator">
                     {creatorNav}
 
                     <section className="userInput">
@@ -343,12 +343,12 @@ const Creator = (props) => {
                         <h3>List of Galleries</h3>
                         <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
                     </section>
-                </>
+                </div>
             );
 
         default:
             return (
-                <>
+                <div id="creator">
                     {creatorNav}
 
                     <section className="userInput">
@@ -364,7 +364,7 @@ const Creator = (props) => {
                         <h3>List of Galleries</h3>
                         <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
                     </section>
-                </>
+                </div>
             );
     }
 };

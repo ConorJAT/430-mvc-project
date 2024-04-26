@@ -48,20 +48,6 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    try {
-      const query = { owner: req.session.account._id };
-      const doc = await Gallery.findOne(query).lean().exec();
-
-      if (doc) {
-        req.session.gallery = Gallery.toAPI(doc);
-      } else {
-        req.session.gallery = null;
-      }
-    } catch (error) {
-      console.log(error);
-      req.session.gallery = null;
-    }
-
     return res.json({ redirect: '/creator' });
   });
 };
