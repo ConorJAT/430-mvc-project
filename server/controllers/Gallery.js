@@ -6,6 +6,8 @@ const { Account, Gallery, Image } = models;
 const galleryPage = async (req, res) => { res.render('app'); };
 
 const getGalleries = async (req, res) => {
+  console.log(req.session.account.galleryCount);
+
   if (req.session.account.galleryCount === 0) {
     return res.status(200).json({ galleries: [] });
   }
@@ -36,15 +38,15 @@ const createGallery = async (req, res) => {
     const newGallery = new Gallery(galleryData);
     await newGallery.save();
 
-    req.session.gallery = Gallery.toAPI(newGallery);
+    // req.session.gallery = Gallery.toAPI(newGallery);
 
     // NEED TO UPDATE ACCOUNT INFO!
     const doc = await Account.findOneAndUpdate(
       { _id: req.session.account._id },
       { $inc: { galleryCount: 1 } },
+      { returnDocument: 'after' },
     ).lean().exec();
     req.session.account = Account.toAPI(doc);
-    // req.session.account.galleryCount++;
 
     return res.status(201).json({
       name: newGallery.name,
@@ -64,16 +66,41 @@ const removeGallery = async (req, res) => {
     return res.status(400).json({ error: 'Name is required to remove gallery.' });
   }
 
-  console.log('Gallery removed! (NOT)');
-  return res.status(201);
+  try {
+    const query = { owner: req.session.account._id, name: req.body.galleryName };
+    const galDoc = await Gallery.findOne(query).lean().exec();
+
+    const selected = Gallery.toAPI(galDoc);
+    await Image.deleteMany({ gallery: selected._id }).lean().exec();
+
+    await Gallery.deleteOne({ _id: selected._id }).lean().exec();
+
+    const doc = await Account.findOneAndUpdate(
+      { _id: req.session.account._id },
+      { $inc: { galleryCount: -1 } },
+      { returnDocument: 'after' },
+    ).lean().exec();
+    req.session.account = Account.toAPI(doc);
+
+    console.log(`Galleries remaining after removal: ${req.session.account.galleryCount}`);
+
+    console.log('Gallery successfully removed.');
+    return res.status(200);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'An error occured removing gallery.' });
+  }
 };
 
 const setGallery = async (req, res) => {
   try {
+    console.log(req.body.name);
+
     const query = { owner: req.session.account._id, name: req.body.name };
-    const doc = Gallery.findOne(query).lean().exec();
+    const doc = await Gallery.findOne(query).lean().exec();
 
     req.session.gallery = Gallery.toAPI(doc);
+    console.log(req.session.gallery);
     return res.status(200);
   } catch (err) {
     console.log(err);
@@ -102,12 +129,14 @@ const getImages = async (req, res) => {
 };
 
 const addImage = async (req, res) => {
+  console.log(req.session.gallery);
+
   if (!req.body.imageName || !req.body.imageURL) {
     return res.status(400).json({ error: 'Name and URL are required to add image.' });
   }
 
   if (!req.session.gallery) {
-    return res.status(400).json({ error: 'No galleries created to add image.' });
+    return res.status(400).json({ error: 'No gallery selected to add image.' });
   }
 
   const imgData = {

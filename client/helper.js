@@ -36,7 +36,7 @@ const setGallery = async (e) => {
         gallery.style.backgroundColor = '#B4D0C5';
     }
 
-    sendPost('/setGallery', { name: e.target.name });
+    sendPost('/setGallery', { name: e.target.getAttribute('name') });
     e.target.setAttribute('current', 'true');
     e.target.style.backgroundColor = '#8EB8A7';
 };

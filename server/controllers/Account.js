@@ -1,7 +1,7 @@
 // Import our Account model.
 const models = require('../models');
 
-const { Account, Gallery } = models;
+const { Account } = models;
 
 const loginPage = (req, res) => { res.render('login'); };
 
