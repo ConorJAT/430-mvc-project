@@ -98,6 +98,10 @@ const removeGallery = async (req, res) => {
     const selected = Gallery.toAPI(galDoc);
     await Image.deleteMany({ gallery: selected._id }).lean().exec();
 
+    if (req.session.gallery._id === selected._id) {
+      req.session.gallery = null;
+    }
+
     // Remove the gallery itself.
     await Gallery.deleteOne({ _id: selected._id }).lean().exec();
 

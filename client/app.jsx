@@ -332,7 +332,10 @@ const Creator = (props) => {
 
                     <section className="userInput">
                         <h3>Remove Gallery</h3>
-                        <RemoveGalleryForm triggerReload={() => setReloadGalleries(!reloadGalleries)}/>
+                        <RemoveGalleryForm triggerReload={() => {
+                            setReloadGalleries(!reloadGalleries);
+                            setReloadImages(!reloadImages);
+                        }}/>
                     </section>
 
                     <section className="imgDisplay">
