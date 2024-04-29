@@ -5,6 +5,7 @@ const compression = require('compression');
 // const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const fileUpload = require('express-fileupload');
 const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
 const session = require('express-session');
@@ -42,6 +43,7 @@ redisClient.connect().then(() => {
   app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
   // app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
   app.use(compression());
+  app.use(fileUpload());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 

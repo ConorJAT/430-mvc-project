@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
-const setURL = (url) => _.escape(url).trim();
 
 const ImageSchema = new mongoose.Schema({
   name: {
@@ -15,11 +14,14 @@ const ImageSchema = new mongoose.Schema({
     type: String,
     trime: true,
   },
-  url: {
+  data: {
+    type: Buffer,
+  },
+  size: {
+    type: Number,
+  },
+  mimetype: {
     type: String,
-    required: true,
-    trim: true,
-    set: setURL,
   },
   gallery: {
     type: mongoose.Schema.ObjectId,
@@ -35,7 +37,8 @@ const ImageSchema = new mongoose.Schema({
 ImageSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   info: doc.info,
-  url: doc.url,
+  data: doc.data,
+  mimetype: doc.mimetype,
   _id: doc._id,
 });
 

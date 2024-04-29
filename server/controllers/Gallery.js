@@ -152,7 +152,7 @@ const getImages = async (req, res) => {
   try {
     // Attempt to retrieve all images with current session gallery's _id.
     const query = { gallery: req.session.gallery._id };
-    const docs = await Image.find(query).select('name info url').lean().exec();
+    const docs = await Image.find(query).select('_id').lean().exec();
 
     // Return list of image objects with 200 status code.
     return res.status(200).json({ images: docs });
@@ -163,33 +163,76 @@ const getImages = async (req, res) => {
   }
 };
 
+const formatImage = async (req, res) => {
+  if (!req.query._id) {
+    return res.status(400).json({ error: 'Missing image id!' });
+  }
+
+  let img;
+  try {
+    img = await Image.findOne({ _id: req.query._id }).exec();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Something went wrong retrieving image.' });
+  }
+
+  res.set({
+    'Content-Type': img.mimetype,
+    'Content-Length': img.size,
+    'Content-Disposition': `filename="${img.name}"`,
+  });
+
+  return res.send(img.data);
+};
+
 // addImage() - Adds an image to the database.
 const addImage = async (req, res) => {
   console.log(req.session.gallery);
 
-  if (!req.body.imageName || !req.body.imageURL) {
-    return res.status(400).json({ error: 'Name and URL are required to add image.' });
-  }
+  console.log(req.files.imgFile);
+  console.log(req.body.imgName);
 
   if (!req.session.gallery) {
     return res.status(400).json({ error: 'No gallery selected to add image.' });
   }
 
-  const imgData = {
-    name: req.body.imageName,
-    info: req.body.imageInfo,
-    url: req.body.imageURL,
-    gallery: req.session.gallery._id,
-  };
+  if (!req.files || !req.files.imgFile) {
+    return res.status(400).json({ error: 'No files provided.' });
+  }
+
+  if (req.files.imgFile.mimetype !== 'image/jpeg'
+      && req.files.imgFile.mimetype !== 'image/png'
+      && req.files.imgFile.mimetype !== 'image/gif') {
+    return res.status(400).json({ error: 'Unacceptable file type.' });
+  }
+
+  const { imgFile } = req.files;
 
   try {
-    const newImage = new Image(imgData);
-    await newImage.save();
+    const imgData = {
+      name: req.body.imgName,
+      info: req.body.immInfo,
+      data: imgFile.data,
+      size: imgFile.size,
+      mimetype: imgFile.mimetype,
+      gallery: req.session.gallery._id,
+    };
+
+    const newImg = new Image(imgData);
+    await newImg.save();
+
+    const doc = await Gallery.findOneAndUpdate(
+      { _id: req.session.gallery._id },
+      { $inc: { imageCount: 1 } },
+      { returnDocument: 'after' },
+    ).lean().exec();
+    req.session.gallery = Gallery.toAPI(doc);
 
     return res.status(201).json({
-      name: newImage.name,
-      info: newImage.info,
-      url: newImage.url,
+      name: newImg.name,
+      info: newImg.info,
+      type: newImg.mimetype,
+      gallery: newImg.gallery,
     });
   } catch (err) {
     console.log(err);
@@ -202,8 +245,33 @@ const removeImage = async (req, res) => {
     return res.status(400).json({ error: 'Name is required to remove image.' });
   }
 
-  console.log('Image removed! (NOT)');
-  return res.status(201);
+  if (!req.session.gallery) {
+    return res.status(400).json({ error: 'No gallery selected to remove image.' });
+  }
+
+  const query = {
+    name: req.body.imageName,
+    gallery: req.session.gallery._id,
+  };
+
+  try {
+    await Image.deleteOne(query).lean().exec();
+
+    // Update image count for current session gallery.
+    const doc = await Gallery.findOneAndUpdate(
+      { _id: req.session.gallery._id },
+      { $inc: { imageCount: -1 } },
+      { returnDocument: 'after' },
+    ).lean().exec();
+    req.session.gallery = Gallery.toAPI(doc);
+
+    // Return 200 status to denote removal success.
+    console.log('Image successfully removed.');
+    return res.status(200).json({});
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Error removing image data.' });
+  }
 };
 
 // Export all Gallery controller functions to be used in the router.
@@ -215,6 +283,7 @@ module.exports = {
   removeGallery,
   resetCurrentGallery,
   getImages,
+  formatImage,
   addImage,
   removeImage,
 };

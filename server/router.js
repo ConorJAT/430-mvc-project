@@ -3,6 +3,7 @@ const mid = require('./middleware');
 
 const router = (app) => {
   app.get('/getImages', mid.requiresLogin, controllers.Gallery.getImages);
+  app.get('/formatImage', mid.requiresLogin, controllers.Gallery.formatImage);
   app.get('/getGalleries', mid.requiresLogin, controllers.Gallery.getGalleries);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);

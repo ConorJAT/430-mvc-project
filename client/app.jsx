@@ -32,19 +32,40 @@ const handleRemoveGallery = (e, onGalleryRemove) => {
     return false;
 };
 
-const handleAddImage = (e, onImageAdd) => {
+const handleAddImage = async (e, onImageAdd) => {
     e.preventDefault();
 
     const imageName = e.target.querySelector('#imgName').value;
     const imageInfo = e.target.querySelector('#imgInfo').value;
-    const imageURL = e.target.querySelector('#imgURL').value;
+    const imageFile = e.target.querySelector('#imgFile').files[0];
 
-    if (!imageName || !imageURL) {
-        helper.handleError('Name and URL required to add image.');
+    if (!imageName || !imageFile) {
+        helper.handleError('Name and File required to add image.');
         return false;
     }
 
-    helper.sendPost(e.target.action, {imageName, imageInfo, imageURL}, onImageAdd);
+    if (imageFile.type !== "image/jpeg" && 
+        imageFile.type !== "image/png" &&
+        imageFile.type !== "image/gif") {
+        helper.handleError('Unacceptable file type.');
+        return false;
+    }
+
+    console.log(imageFile.type);
+
+    const response = await fetch(e.target.action, {
+        method: 'POST',
+        body: new FormData(e.target),
+    });
+
+    const result = await response.json();
+    
+    if (result.error) {
+        helper.handleError(result.error);
+    }
+
+    onImageAdd(result);
+
     return false;
 };
 
@@ -127,13 +148,13 @@ const AddImageForm = (props) => {
                 onSubmit={(e) => handleAddImage(e, props.triggerReload)}
                 action="/addImage" 
                 method="POST"
+                encType="multipart/form-data"
             >
                 <label htmlFor="imgName">Image Name: </label>
                 <input type="text" id="imgName" name="imgName" placeholder="Enter Image Name"/><br/>
                 <label htmlFor="imgInfo">Image Info: </label>
                 <input type="text" id="imgInfo" name="imgInfo" placeholder="Enter Image Info"/><br/>
-                <label htmlFor="imgURL">Image URL: </label>
-                <input type="text" id="imgURL" name="imgURL" placeholder="Enter Image URL"/><br/><br/>
+                <input type="file" id="imgFile" name="imgFile"/><br/><br/>
                 <input type="submit" value="Add Image"/>
             </form>
         </div>
@@ -199,9 +220,9 @@ const ImageDisplay = (props) => {
         );
     }
 
-    const imgElements = images.map(img => {
+    const imgElements = images.map((img) =>  {
         return (
-            <img src={img.url} className="galImage"/>
+            <img src={`../formatImage?_id=${img._id}`} className="galImage"/>
         );
     });
 
