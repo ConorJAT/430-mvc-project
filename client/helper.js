@@ -29,7 +29,6 @@ const handleError = (err) =>{
 
 const setGallery = async (e, onGalleryClick) => {
     const gals = document.getElementsByClassName('gallery');
-    console.log(gals);
 
     for (const gallery of gals) {
         gallery.setAttribute('current', 'false');

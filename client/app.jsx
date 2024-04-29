@@ -51,8 +51,6 @@ const handleAddImage = async (e, onImageAdd) => {
         return false;
     }
 
-    console.log(imageFile.type);
-
     const response = await fetch(e.target.action, {
         method: 'POST',
         body: new FormData(e.target),
@@ -247,7 +245,6 @@ const GalleryList = (props) => {
     }, [props.reloadGalleries]);
 
     if(galleries.length === 0) {
-        console.log('No galleries!');
         return (
             <div className="galleries">
                 <h3>No galleries to display.</h3>

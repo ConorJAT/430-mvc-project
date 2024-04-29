@@ -13,8 +13,6 @@ const notFound = (req, res) => {
 
 // getGalleries() - Retrieves all galleries created under the current session user.
 const getGalleries = async (req, res) => {
-  console.log(req.session.account.galleryCount);
-
   // If no galleries are created, return 200 status w/ empty array.
   if (req.session.account.galleryCount === 0) {
     return res.status(200).json({ galleries: [] });
@@ -114,7 +112,6 @@ const removeGallery = async (req, res) => {
     req.session.account = Account.toAPI(doc);
 
     // Return 200 status to denote removal success.
-    console.log(`Galleries remaining after removal: ${req.session.account.galleryCount}`);
     console.log('Gallery successfully removed.');
     return res.status(200).json({});
   } catch (err) {
@@ -127,15 +124,12 @@ const removeGallery = async (req, res) => {
 // setGallery() - Sets the current session gallery (mainly to pull/add images from).
 const setGallery = async (req, res) => {
   try {
-    console.log(req.body.name);
-
     // Search for requested gallery in the database.
     const query = { owner: req.session.account._id, name: req.body.name };
     const doc = await Gallery.findOne(query).lean().exec();
 
     // Set the session gallery to found gallery and return with 200 status code.
     req.session.gallery = Gallery.toAPI(doc);
-    console.log(req.session.gallery);
     return res.status(200).json({});
   } catch (err) {
     // If not successful, log the error and return 500 error.
@@ -153,8 +147,6 @@ const resetCurrentGallery = async (req, res) => {
 
 // getImageIds() - Retrieves all image IDs related to current session gallery from database.
 const getImageIds = async (req, res) => {
-  console.log(req.session.gallery);
-
   // If user has not created any galleries, return status code 200 with empty array.
   if (req.session.account.galleryCount === 0) {
     return res.status(200).json({ images: [] });
@@ -209,11 +201,6 @@ const retrieveImage = async (req, res) => {
 
 // addImage() - Adds an image to the database.
 const addImage = async (req, res) => {
-  console.log(req.session.gallery);
-
-  console.log(req.files.imgFile);
-  console.log(req.body.imgName);
-
   // If there is no current session gallery, return with 400 error.
   if (!req.session.gallery) {
     return res.status(400).json({ error: 'No gallery selected to add image.' });
