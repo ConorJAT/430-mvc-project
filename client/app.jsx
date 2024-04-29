@@ -222,7 +222,7 @@ const ImageDisplay = (props) => {
 
     const imgElements = images.map((img) =>  {
         return (
-            <img src={`../formatImage?_id=${img._id}`} className="galImage"/>
+            <img src={`../retrieveImage?_id=${img._id}`} className="galImage"/>
         );
     });
 

@@ -130,13 +130,14 @@ const setGallery = async (req, res) => {
   }
 };
 
+// resetCurrentGallery() - Sets the current session gallery to null (used for page reload/redirects).
 const resetCurrentGallery = async (req, res) => {
   req.session.gallery = null;
   return res.status(200).json({});
 };
 
-// getImages() - Retrieves all images related to current session gallery from database.
-const getImages = async (req, res) => {
+// getImageIds() - Retrieves all image IDs related to current session gallery from database.
+const getImageIds = async (req, res) => {
   console.log(req.session.gallery);
 
   // If user has not created any galleries, return status code 200 with empty array.
@@ -150,11 +151,11 @@ const getImages = async (req, res) => {
   }
 
   try {
-    // Attempt to retrieve all images with current session gallery's _id.
+    // Attempt to retrieve all image _ids with current session gallery's _id.
     const query = { gallery: req.session.gallery._id };
     const docs = await Image.find(query).select('_id').lean().exec();
 
-    // Return list of image objects with 200 status code.
+    // Return list of image _ids with 200 status code.
     return res.status(200).json({ images: docs });
   } catch (err) {
     // If not successful, log the error and return 500 error.
@@ -163,25 +164,31 @@ const getImages = async (req, res) => {
   }
 };
 
-const formatImage = async (req, res) => {
+// retrieveImage() - Retrieves image data and returns it in a way that client side can read.
+const retrieveImage = async (req, res) => {
+  // _id required to query data; If not present, return 400 status error.
   if (!req.query._id) {
-    return res.status(400).json({ error: 'Missing image id!' });
+    return res.status(400).json({ error: 'Missing image id.' });
   }
 
   let img;
   try {
+    // Attempt to find the image using the passed in _id.
     img = await Image.findOne({ _id: req.query._id }).exec();
   } catch (err) {
+    // If not successful, log the error and return 500 error.
     console.log(err);
     return res.status(500).json({ error: 'Something went wrong retrieving image.' });
   }
 
+  // Set the response with all necessary information.
   res.set({
     'Content-Type': img.mimetype,
     'Content-Length': img.size,
     'Content-Disposition': `filename="${img.name}"`,
   });
 
+  // Send the image file data.
   return res.send(img.data);
 };
 
@@ -192,23 +199,28 @@ const addImage = async (req, res) => {
   console.log(req.files.imgFile);
   console.log(req.body.imgName);
 
+  // If there is no current session gallery, return with 400 error.
   if (!req.session.gallery) {
     return res.status(400).json({ error: 'No gallery selected to add image.' });
   }
 
+  // If there is no file or file under the name 'imgFile', then return with 400 error.
   if (!req.files || !req.files.imgFile) {
     return res.status(400).json({ error: 'No files provided.' });
   }
 
+  // File can only be JPEG, PNG or GIF. If not, return with 400 error.
   if (req.files.imgFile.mimetype !== 'image/jpeg'
       && req.files.imgFile.mimetype !== 'image/png'
       && req.files.imgFile.mimetype !== 'image/gif') {
     return res.status(400).json({ error: 'Unacceptable file type.' });
   }
 
+  // Transfer file information over to local object.
   const { imgFile } = req.files;
 
   try {
+    // Format data to be inserted into the database.
     const imgData = {
       name: req.body.imgName,
       info: req.body.immInfo,
@@ -218,9 +230,11 @@ const addImage = async (req, res) => {
       gallery: req.session.gallery._id,
     };
 
+    // Attempt to save new image into the database.
     const newImg = new Image(imgData);
     await newImg.save();
 
+    // Increment current session gallery's image count.
     const doc = await Gallery.findOneAndUpdate(
       { _id: req.session.gallery._id },
       { $inc: { imageCount: 1 } },
@@ -228,6 +242,7 @@ const addImage = async (req, res) => {
     ).lean().exec();
     req.session.gallery = Gallery.toAPI(doc);
 
+    // Return new image's information with status code 201.
     return res.status(201).json({
       name: newImg.name,
       info: newImg.info,
@@ -235,26 +250,32 @@ const addImage = async (req, res) => {
       gallery: newImg.gallery,
     });
   } catch (err) {
+    // If not successful, log the error and return 500 error.
     console.log(err);
     return res.status(500).json({ error: 'An error occured adding image.' });
   }
 };
 
+// removeImage() - Removes an image from the current session gallery and removes its data from the database.
 const removeImage = async (req, res) => {
+  // Image name is required to remove image; if no name provided, return with 400 error.
   if (!req.body.imageName) {
     return res.status(400).json({ error: 'Name is required to remove image.' });
   }
 
+  // If there is no current session gallery, return with 400 error.
   if (!req.session.gallery) {
     return res.status(400).json({ error: 'No gallery selected to remove image.' });
   }
 
+  // Set up query to locate the image.
   const query = {
     name: req.body.imageName,
     gallery: req.session.gallery._id,
   };
 
   try {
+    // Attempt to remove the image from database.
     await Image.deleteOne(query).lean().exec();
 
     // Update image count for current session gallery.
@@ -269,6 +290,7 @@ const removeImage = async (req, res) => {
     console.log('Image successfully removed.');
     return res.status(200).json({});
   } catch (err) {
+    // If not successful, log the error and return 500 error.
     console.log(err);
     return res.status(500).json({ error: 'Error removing image data.' });
   }
@@ -282,8 +304,8 @@ module.exports = {
   setGallery,
   removeGallery,
   resetCurrentGallery,
-  getImages,
-  formatImage,
+  getImageIds,
+  retrieveImage,
   addImage,
   removeImage,
 };
