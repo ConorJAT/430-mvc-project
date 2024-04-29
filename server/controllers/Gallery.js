@@ -6,6 +6,11 @@ const { Account, Gallery, Image } = models;
 // galleryPage() - Renders the entirety of the user app.
 const galleryPage = async (req, res) => { res.render('app'); };
 
+// notFound() - Renders the 404 page if the user tries to go anywhere else.
+const notFound = (req, res) => {
+  res.status(404).render('notFound', { page: req.url });
+};
+
 // getGalleries() - Retrieves all galleries created under the current session user.
 const getGalleries = async (req, res) => {
   console.log(req.session.account.galleryCount);
@@ -314,6 +319,7 @@ const removeImage = async (req, res) => {
 // Export all Gallery controller functions to be used in the router.
 module.exports = {
   galleryPage,
+  notFound,
   getGalleries,
   createGallery,
   setGallery,

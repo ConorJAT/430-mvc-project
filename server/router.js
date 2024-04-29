@@ -24,6 +24,8 @@ const router = (app) => {
   app.post('/removeImage', mid.requiresLogin, controllers.Gallery.removeImage);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+  app.get('/*', controllers.Gallery.notFound);
 };
 
 module.exports = router;
