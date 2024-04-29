@@ -84,6 +84,11 @@ const removeGallery = async (req, res) => {
     const query = { owner: req.session.account._id, name: req.body.galleryName };
     const galDoc = await Gallery.findOne(query).lean().exec();
 
+    // If gallery does not exist, return with 202 status.
+    if (!galDoc) {
+      return res.status(202).json({ error: 'Gallery does not exist.' });
+    }
+
     // Use found gallery's _id and remove all associated images.
     const selected = Gallery.toAPI(galDoc);
     await Image.deleteMany({ gallery: selected._id }).lean().exec();
@@ -277,6 +282,14 @@ const removeImage = async (req, res) => {
   };
 
   try {
+    // See if image exists in the database.
+    const imgDoc = await Image.findOne(query).lean().exec();
+
+    // If it does not, return with a 202 error.
+    if (!imgDoc) {
+      return res.status(202).json({ error: 'Image does not exist in gallery.' });
+    }
+
     // Attempt to remove the image from database.
     await Image.deleteOne(query).lean().exec();
 
