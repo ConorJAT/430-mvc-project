@@ -102,7 +102,7 @@ const removeGallery = async (req, res) => {
     // Return 200 status to denote removal success.
     console.log(`Galleries remaining after removal: ${req.session.account.galleryCount}`);
     console.log('Gallery successfully removed.');
-    return res.status(200);
+    return res.status(200).json({});
   } catch (err) {
     // If not successful, log the error and return 500 error.
     console.log(err);
@@ -122,12 +122,17 @@ const setGallery = async (req, res) => {
     // Set the session gallery to found gallery and return with 200 status code.
     req.session.gallery = Gallery.toAPI(doc);
     console.log(req.session.gallery);
-    return res.status(200);
+    return res.status(200).json({});
   } catch (err) {
     // If not successful, log the error and return 500 error.
     console.log(err);
     return res.status(500).json({ error: 'An error occured setting current gallery.' });
   }
+};
+
+const resetCurrentGallery = async (req, res) => {
+  req.session.gallery = null;
+  return res.status(200).json({});
 };
 
 // getImages() - Retrieves all images related to current session gallery from database.
@@ -208,6 +213,7 @@ module.exports = {
   createGallery,
   setGallery,
   removeGallery,
+  resetCurrentGallery,
   getImages,
   addImage,
   removeImage,

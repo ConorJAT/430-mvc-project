@@ -27,7 +27,7 @@ const handleError = (err) =>{
     alert(err);
 };
 
-const setGallery = async (e) => {
+const setGallery = async (e, onGalleryClick) => {
     const gals = document.getElementsByClassName('gallery');
     console.log(gals);
 
@@ -36,7 +36,7 @@ const setGallery = async (e) => {
         gallery.style.backgroundColor = '#B4D0C5';
     }
 
-    sendPost('/setGallery', { name: e.target.getAttribute('name') });
+    sendPost('/setGallery', { name: e.target.getAttribute('name') }, onGalleryClick);
     e.target.setAttribute('current', 'true');
     e.target.style.backgroundColor = '#8EB8A7';
 };

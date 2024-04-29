@@ -236,7 +236,7 @@ const GalleryList = (props) => {
 
     const galleryDivs = galleries.map(gal => {
         return (
-            <div className="gallery" name={gal.name} current="false" onClick={helper.setGallery}>{gal.name}</div>
+            <div className="gallery" name={gal.name} current="false" onClick={(e) => helper.setGallery(e, props.triggerReload)}>{gal.name}</div>
         );
     });
 
@@ -278,7 +278,7 @@ const Creator = (props) => {
 
                     <section className="galList">
                         <h3>List of Galleries</h3>
-                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
+                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries} triggerReload={() => setReloadImages(!reloadImages)}/>
                     </section>
                 </div>
             );
@@ -299,7 +299,7 @@ const Creator = (props) => {
 
                     <section className="galList">
                         <h3>List of Galleries</h3>
-                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
+                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries} triggerReload={() => setReloadImages(!reloadImages)}/>
                     </section>
                 </div>
             );
@@ -320,7 +320,7 @@ const Creator = (props) => {
 
                     <section className="galList">
                         <h3>List of Galleries</h3>
-                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
+                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries} triggerReload={() => setReloadImages(!reloadImages)}/>
                     </section>
                 </div>
             );
@@ -341,7 +341,7 @@ const Creator = (props) => {
 
                     <section className="galList">
                         <h3>List of Galleries</h3>
-                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
+                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries} triggerReload={() => setReloadImages(!reloadImages)}/>
                     </section>
                 </div>
             );
@@ -362,14 +362,14 @@ const Creator = (props) => {
 
                     <section className="galList">
                         <h3>List of Galleries</h3>
-                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries}/>
+                        <GalleryList galleries={[]} reloadGalleries={reloadGalleries} triggerReload={() => setReloadImages(!reloadImages)}/>
                     </section>
                 </div>
             );
     }
 };
 
-const init = () => {
+const init = async () => {
     const displayCreator = document.getElementById('galleryBtn');
     const displayAccount = document.getElementById('accountBtn');
 
@@ -383,8 +383,11 @@ const init = () => {
     displayAccount.addEventListener('click', (e) => {
         e.preventDefault();
         root.render( <PasswordChangeForm/> );
+        helper.sendPost('/resetGallery', {});
         return false;
     });
+
+    await helper.sendPost('/resetGallery', {});
 
     root.render( <Creator/> );
 };
