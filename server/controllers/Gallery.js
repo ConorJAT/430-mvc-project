@@ -130,7 +130,8 @@ const setGallery = async (req, res) => {
   }
 };
 
-// resetCurrentGallery() - Sets the current session gallery to null (used for page reload/redirects).
+// resetCurrentGallery() - Sets the current session gallery to null (used for
+//                         page reload/redirects).
 const resetCurrentGallery = async (req, res) => {
   req.session.gallery = null;
   return res.status(200).json({});
@@ -256,7 +257,8 @@ const addImage = async (req, res) => {
   }
 };
 
-// removeImage() - Removes an image from the current session gallery and removes its data from the database.
+// removeImage() - Removes an image from the current session gallery and removes its data
+//                 from the database.
 const removeImage = async (req, res) => {
   // Image name is required to remove image; if no name provided, return with 400 error.
   if (!req.body.imageName) {
