@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const {createRoot} = require('react-dom/client');
 
+// handleSignup() - Sends a post request to create a new user account.
 const handleSignup = (e) => {
     e.preventDefault();
 
@@ -23,6 +24,8 @@ const handleSignup = (e) => {
     return false;
 };
 
+// handleLogin() - Sends a post request to validate a user and allow/deny
+//                 access into the app.
 const handleLogin = (e) => {
     e.preventDefault();
 
@@ -38,6 +41,7 @@ const handleLogin = (e) => {
     return false;
 };
 
+// REACT COMPONENTS - LOGIN FORMS
 const SignupWindow = (props) => {
     return (
         <div className='infoForm'>
@@ -78,6 +82,7 @@ const LoginWindow = (props) => {
     );
 };
 
+// init() - Set up navlinks and React root.
 const init = () => {
     const loginButton = document.getElementById('loginBtn');
     const signupButton = document.getElementById('signupBtn');

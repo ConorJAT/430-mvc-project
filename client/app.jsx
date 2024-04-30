@@ -3,6 +3,7 @@ const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
+// handleCreateGallery() - Sends a post request to create a gallery upon submit.
 const handleCreateGallery = (e, onGalleryCreate) => {
     e.preventDefault();
 
@@ -18,6 +19,7 @@ const handleCreateGallery = (e, onGalleryCreate) => {
     return false;
 };
 
+// handleRemoveGallery() - Sends a post request to remove a gallery upon submit.
 const handleRemoveGallery = (e, onGalleryRemove) => {
     e.preventDefault();
 
@@ -32,6 +34,8 @@ const handleRemoveGallery = (e, onGalleryRemove) => {
     return false;
 };
 
+// handleAddImage() - Sends a custom post request to add an image to a selected
+//                    gallery upon submit.
 const handleAddImage = async (e, onImageAdd) => {
     e.preventDefault();
 
@@ -67,6 +71,8 @@ const handleAddImage = async (e, onImageAdd) => {
     return false;
 };
 
+// handleRemoveImage() - Sends a post request to remove an image from a selected
+//                       gallery.
 const handleRemoveImage = (e, onImageRemove) => {
     e.preventDefault();
 
@@ -81,6 +87,8 @@ const handleRemoveImage = (e, onImageRemove) => {
     return false;
 };
 
+// handlePasswordChange() - Sends a post request to change the current user's
+//                          password.
 const handlePasswordChange = (e) => {
     e.preventDefault();
 
@@ -102,6 +110,7 @@ const handlePasswordChange = (e) => {
     return false;
 };
 
+// REACT COMPONENTS - CREATOR FORMS
 const CreateGalleryForm = (props) => {
     return (
         <div>
@@ -176,6 +185,7 @@ const RemoveImageForm = (props) => {
     );
 };
 
+// REACT COMPONENTS - ACCOUNT
 const PasswordChangeForm = (props) => {
     return (
         <div className='passChange'>
@@ -222,6 +232,7 @@ const Account = (props) => {
     )
 };
 
+// REACT COMPONENTS - CREATOR
 const ImageDisplay = (props) => {
     const [images, setImages] = useState(props.images);
 
@@ -415,6 +426,7 @@ const Creator = (props) => {
     }
 };
 
+// init() - Set up navlinks and React root.
 const init = async () => {
     const displayCreator = document.getElementById('galleryBtn');
     const displayAccount = document.getElementById('accountBtn');
