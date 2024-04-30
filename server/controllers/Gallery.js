@@ -164,7 +164,7 @@ const getImageIds = async (req, res) => {
 
   // If there is no current session gallery, return status code 400 with empty array.
   if (!req.session.gallery) {
-    return res.status(400).json({ error: 'No galleries to retrieve images from.', images: [] });
+    return res.status(200).json({ error: 'No galleries to retrieve images from.', images: [] });
   }
 
   try {
