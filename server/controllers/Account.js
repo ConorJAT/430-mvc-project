@@ -120,7 +120,7 @@ const changePassword = async (req, res) => {
 };
 
 // subscribe() - Allows the user to become subscribe for the app's premium plan.
-const subscribe = async (res, req) => {
+const subscribe = async (req, res) => {
   try {
     // Attempt to update the user's subscriber value to true.
     const doc = await Account.findByIdAndUpdate(req.session.account._id, { isSubscribed: true });
@@ -131,7 +131,7 @@ const subscribe = async (res, req) => {
   } catch (err) {
     // If not successful, log the error and return 500 error.
     console.log(err);
-    return res.status(500).json({ error: 'Error changing password.' });
+    return res.status(500).json({ error: 'Error during subscription process.' });
   }
 };
 

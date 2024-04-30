@@ -178,7 +178,8 @@ const RemoveImageForm = (props) => {
 
 const PasswordChangeForm = (props) => {
     return (
-        <div>
+        <div className='passChange'>
+            <h2>Change Account Password</h2>
             <form id="passwordChangeForm"
                 name="passwordChangeForm"
                 onSubmit={handlePasswordChange}
@@ -199,7 +200,7 @@ const PasswordChangeForm = (props) => {
 
 const PremiumSubscription = (props) => {
     return (
-        <div>
+        <div className='subscription'>
             <h2>Subcscribe to Creator+</h2>
             <p>
                 Save the pictures that matter most with Creator+! With Creator+, you gain
@@ -207,7 +208,7 @@ const PremiumSubscription = (props) => {
                 Additionally, each gallery you create will hold up to 20 pictures each; that's
                 4x the traditional plan! So don't wait now: subscribe for Creator+ today!
             </p>
-            <button>Subscribe to Creator+!</button>
+            <button onClick={() => { helper.sendPost('/subscribe', {})}}>Subscribe to Creator+!</button>
         </div>
     );
 };
