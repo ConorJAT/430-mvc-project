@@ -34,6 +34,16 @@ const getGalleries = async (req, res) => {
 
 // createGallery() - Creates a gallery object and adds it into the database.
 const createGallery = async (req, res) => {
+  // If the user is not subscribed, cap their gallery creation at 2 galleries.
+  if (!req.session.account.isSubscribed && req.session.account.galleryCount === 2) {
+    return res.status(401).json({ error: 'Reached gallery creation limit. Subscribe for more gallery creation!' });
+  }
+
+  // If the user is subscribed, cap their total gallery creation at 10 galleries.
+  if (req.session.account.isSubscribed && req.session.account.galleryCount === 10) {
+    return res.status(401).json({ error: 'Max number of galleries created.' });
+  }
+
   // Name required; if no name provided, return 400 error.
   if (!req.body.galleryName) {
     return res.status(400).json({ error: 'Name is required to create gallery.' });
@@ -96,7 +106,7 @@ const removeGallery = async (req, res) => {
     const selected = Gallery.toAPI(galDoc);
     await Image.deleteMany({ gallery: selected._id }).lean().exec();
 
-    if (req.session.gallery._id === selected._id) {
+    if (req.session.gallery && req.session.gallery._id === selected._id) {
       req.session.gallery = null;
     }
 
@@ -204,6 +214,16 @@ const addImage = async (req, res) => {
   // If there is no current session gallery, return with 400 error.
   if (!req.session.gallery) {
     return res.status(400).json({ error: 'No gallery selected to add image.' });
+  }
+
+  // If the user is not subscribed, cap each gallery to holding 5 images max.
+  if (!req.session.account.isSubscribed && req.session.gallery.imageCount === 5) {
+    return res.status(401).json({ error: 'Reached image limit for this gallery. Subscribe to add more images for each gallery!' });
+  }
+
+  // If user is subscribed, cap each gallery to holding 20 images max.
+  if (req.session.account.isSubscribed && req.session.gallery.imageCount === 20) {
+    return res.status(401).json({ error: 'Max number of images added to this gallery.' });
   }
 
   // If there is no file or file under the name 'imgFile', then return with 400 error.

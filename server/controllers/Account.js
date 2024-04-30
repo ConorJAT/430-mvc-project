@@ -119,6 +119,22 @@ const changePassword = async (req, res) => {
   });
 };
 
+// subscribe() - Allows the user to become subscribe for the app's premium plan.
+const subscribe = async (res, req) => {
+  try {
+    // Attempt to update the user's subscriber value to true.
+    const doc = await Account.findByIdAndUpdate(req.session.account._id, { isSubscribed: true });
+    req.session.account = Account.toAPI(doc);
+
+    // Return with successful 200 status.
+    return res.status(200).json({});
+  } catch (err) {
+    // If not successful, log the error and return 500 error.
+    console.log(err);
+    return res.status(500).json({ error: 'Error changing password.' });
+  }
+};
+
 // Export all Account controller functions to be used in the router.
 module.exports = {
   loginPage,
@@ -126,4 +142,5 @@ module.exports = {
   login,
   logout,
   changePassword,
+  subscribe,
 };

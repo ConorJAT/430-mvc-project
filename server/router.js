@@ -15,6 +15,8 @@ const router = (app) => {
 
   app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
 
+  app.post('/subscribe', mid.requiresSecure, mid.requiresLogin, controllers.Account.subscribe);
+
   app.get('/creator', mid.requiresLogin, controllers.Gallery.galleryPage);
   app.post('/createGallery', mid.requiresLogin, controllers.Gallery.createGallery);
   app.post('/removeGallery', mid.requiresLogin, controllers.Gallery.removeGallery);

@@ -197,6 +197,30 @@ const PasswordChangeForm = (props) => {
     );
 };
 
+const PremiumSubscription = (props) => {
+    return (
+        <div>
+            <h2>Subcscribe to Creator+</h2>
+            <p>
+                Save the pictures that matter most with Creator+! With Creator+, you gain
+                access to create an additional 8 galleries to be used as you please!
+                Additionally, each gallery you create will hold up to 20 pictures each; that's
+                4x the traditional plan! So don't wait now: subscribe for Creator+ today!
+            </p>
+            <button>Subscribe to Creator+!</button>
+        </div>
+    );
+};
+
+const Account = (props) => {
+    return (
+        <div className="account">
+            <PasswordChangeForm/>
+            <PremiumSubscription/>
+        </div>
+    )
+};
+
 const ImageDisplay = (props) => {
     const [images, setImages] = useState(props.images);
 
@@ -403,7 +427,7 @@ const init = async () => {
 
     displayAccount.addEventListener('click', (e) => {
         e.preventDefault();
-        root.render( <PasswordChangeForm/> );
+        root.render( <Account/> );
         helper.sendPost('/resetGallery', {});
         return false;
     });
