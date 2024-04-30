@@ -2,7 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const compression = require('compression');
-// const favicon = require('serve-favicon');
+const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
@@ -41,7 +41,7 @@ redisClient.connect().then(() => {
   app.use(helmet());
   app.use(express.static('js'));
   app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
-  // app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
+  app.use(favicon(`${__dirname}/../hosted/images/favicon.png`));
   app.use(compression());
   app.use(fileUpload());
   app.use(bodyParser.urlencoded({ extended: true }));
