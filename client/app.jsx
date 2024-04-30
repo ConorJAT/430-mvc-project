@@ -272,7 +272,7 @@ const GalleryList = (props) => {
     if(galleries.length === 0) {
         return (
             <div className="galleries">
-                <h3>No galleries to display.</h3>
+                <p>No galleries to display.</p>
             </div>
         );
     }
