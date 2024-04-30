@@ -190,7 +190,7 @@ const PasswordChangeForm = (props) => {
                 <input type="text" id="oldPass" name="oldPass" placeholder="Enter Old Password"/><br/>
                 <label htmlFor="newPass">New Password: </label>
                 <input type="password" id="newPass" name="newPass" placeholder="Enter New Password"/><br/>
-                <label htmlFor="newPass2">Retype New Password: </label>
+                <label htmlFor="newPass2">New Password: </label>
                 <input type="password" id="newPass2" name="newPass2" placeholder="Retype New Password"/><br/><br/>
                 <input type="submit" value="Change Password"/>
             </form>

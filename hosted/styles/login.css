@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+body{
+    margin: 0 auto;
+    width: 100%;
+    min-width: 450px;
+    max-width: 1440px;
+}
+
+#appNav {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(219, 255, 237);
+}
+
+.appNavLink,  #appNav > h2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0 20px;
+}
+
+#navImg {
+    width: 40px;
+}
+
+#appLinks {
+    display: flex;
+}
+
+.appNavLink{
+    text-decoration: none;
+
+    color: black;
+}
+
+.appNavLink:link{
+    text-decoration: none;
+}
+
+.appNavLink:visited{
+    text-decoration: none;
+}
+
+.appNavLink:hover{
+    text-decoration: none;
+    background-color: rgb(192, 247, 219);
+}
+
+.appNavLink:active{
+    text-decoration: none;
+    background-color: rgb(166, 240, 201);
+}
+
+
+/* -- TITLE STYLES -- */
+#title {
+    position: relative;
+    width: 360px;
+
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: center;
+}
+
+#titleImg {
+    text-align: center;
+    width: 280px;
+    opacity: 0.7;
+}
+
+#title > h1 {
+    position: absolute;
+    top: 27%;
+    width: 100%;
+    font-size: 32pt;
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+}
+
+/* -- FORM STYLES -- */
+#content{
+    position: relative;
+    height: 180px;
+}
+
+.infoForm {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+/* -- FONT STYLES -- */
+h3{
+    font-family: 'Montserrat', sans-serif;
+}
+
+div, input, p{
+    font-family: 'Poppins', sans-serif;
+}

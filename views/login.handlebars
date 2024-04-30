@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/assets/styles/login.css"/>
     <title>Gallery Creator</title>
 </head>
 <body>
-    <nav>
-        <div><a id="loginBtn" href="/login">Login</a></div>
-        <div><a id="signupBtn" href="/signup">Sign Up</a></div>
+    <nav id="appNav">
+        <h2>Gallery Creator</h2>
+        <div id="appLinks">
+            <a id="loginBtn" class="appNavLink" href="/login"><div>Login</div></a>
+            <a id="signupBtn" class="appNavLink" href="/signup"><div>Sign Up</div></a>
+        </div>
     </nav>
+
+    <div id="title">
+        <img src="./assets/images/login-frame.png" alt="Picture frame." id="titleImg"/>
+        <h1>Gallery Creator</h1>
+    </div>
+    
 
     <section id="content"></section>
 

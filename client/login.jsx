@@ -40,7 +40,7 @@ const handleLogin = (e) => {
 
 const SignupWindow = (props) => {
     return (
-        <div>
+        <div className='infoForm'>
             <form id="signupForm"
                 name="signupForm"
                 onSubmit={handleSignup}
@@ -48,11 +48,11 @@ const SignupWindow = (props) => {
                 method="POST"
             >
                 <label htmlFor="username">Username: </label>
-                <input type="text" id="user" name="username" placeholder="Enter Username"/>
+                <input type="text" id="user" name="username" placeholder="Enter Username"/><br/>
                 <label htmlFor="password">Password: </label>
-                <input type="password" id="pass" name="password" placeholder="Enter Password"/>
+                <input type="password" id="pass" name="password" placeholder="Enter Password"/><br/>
                 <label htmlFor="password2">Password: </label>
-                <input type="password" id="pass2" name="password2" placeholder="Retype Password"/>
+                <input type="password" id="pass2" name="password2" placeholder="Retype Password"/><br/><br/>
                 <input type="submit" value="Sign Up"/>
             </form>
         </div>
@@ -61,7 +61,7 @@ const SignupWindow = (props) => {
 
 const LoginWindow = (props) => {
     return (
-        <div>
+        <div className='infoForm'>
             <form id="loginForm"
                 name="loginForm"
                 onSubmit={handleLogin} 
@@ -69,9 +69,9 @@ const LoginWindow = (props) => {
                 method="POST"
             >
                 <label htmlFor="username">Username: </label>
-                <input type="text" id="user" name="username" placeholder="Enter Username"/>
+                <input type="text" id="user" name="username" placeholder="Enter Username"/><br/>
                 <label htmlFor="password">Password: </label>
-                <input type="password" id="pass" name="password" placeholder="Enter Password"/>
+                <input type="password" id="pass" name="password" placeholder="Enter Password"/><br/><br/>
                 <input type="submit" value="Sign In"/>
             </form>
         </div>
